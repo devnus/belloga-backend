@@ -1,0 +1,18 @@
+[submodule "belloga-labeling-service"]
+	path = belloga-labeling-service
+	url = https://github.com/devnus/belloga-labeling-service.git
+[submodule "belloga-auth-service"]
+	path = belloga-auth-service
+	url = https://github.com/devnus/belloga-auth-service.git
+[submodule "belloga-user-service"]
+	path = belloga-user-service
+	url = https://github.com/devnus/belloga-user-service.git
+[submodule "belloga-raw-data-service"]
+	path = belloga-raw-data-service
+	url = https://github.com/devnus/belloga-raw-data-service.git
+[submodule "belloga-point-service"]
+	path = belloga-point-service
+	url = https://github.com/devnus/belloga-point-service.git
+[submodule "belloga-labeling-verification-service"]
+	path = belloga-labeling-verification-service
+	url = https://github.com/devnus/belloga-labeling-verification-service.git
