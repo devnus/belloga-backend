@@ -20,3 +20,6 @@
 	path = belloga-firebase-service
 	url = https://github.com/devnus/belloga-firebase-service.git
 	
+[submodule "belloga-preprocessing"]
+	path = belloga-preprocessing
+	url = https://github.com/devnus/belloga-preprocessing.git
