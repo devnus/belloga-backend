@@ -16,7 +16,6 @@
 [submodule "belloga-labeling-verification-service"]
 	path = belloga-labeling-verification-service
 	url = https://github.com/devnus/belloga-labeling-verification-service.git
-
 [submodule "belloga-firebase-service"]
 	path = belloga-firebase-service
 	url = https://github.com/devnus/belloga-firebase-service.git
