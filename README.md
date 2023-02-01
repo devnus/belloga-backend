@@ -11,7 +11,7 @@
 
 ## 1-2. 주요 기능 통신 다이어그램
 
-<p align="center"><img src="https://user-images.githubusercontent.com/57690870/215765572-39c8d96b-9a00-41ac-9a5b-5a487e624897.png" width="680" height="850"></p>
+<p align="center"><img src="https://user-images.githubusercontent.com/57690870/215936384-1724587c-2baf-431b-8c81-e1c502d44985.png" width="680" height="850"></p>
 
 ## 1-3. 주요 기능
 
