@@ -25,7 +25,7 @@
 
 # 개발 결과물
 
-## 2-2. AWS 아키텍처
+## 2-1. AWS 아키텍처
 
 <p align="center"><img src="https://user-images.githubusercontent.com/57690870/215766497-7ca32a36-c2e5-4883-9ab4-559bc3a1101f.png"></p>
 
@@ -33,9 +33,9 @@
 먼저 마이크로서비스들의 인증 인가를 통합적으로 수행하기 위해 앞단에 `API Gateway`를 두었습니다. 또한 마이크로서비스 간 비동기 통신을 위해 `Apache Kafka` 관리형 서비스인 `MSK`를 사용하였습니다.
 이외에도 `S3`, `ECR`, `ElastiCache` 등 다양한 AWS 관리형 서비스를 활용하였습니다.
 
-## 2-1. DDD 도입
+## 2-2. DDD 도입
 
-### 2-1-a. 이벤트스토밍을 통한 바운디드 컨텍스트기반 마이크로서비스 도출
+### 2-2-a. 이벤트스토밍을 통한 바운디드 컨텍스트기반 마이크로서비스 도출
 
 <p align="center"><img src="https://user-images.githubusercontent.com/57690870/215766660-1a358c5b-f669-4ab2-b59b-6ad61cd7c78c.png"></p>
 
@@ -58,12 +58,12 @@
 - **belloga-firebase-service**
 → `스프링` 으로 구현, firebase 관련 비즈니스 응집성 담당(fcm 푸쉬알림)
 
-### 2-1-b. 애그리거트 패턴 적극 사용
+### 2-2-b. 애그리거트 패턴 적극 사용
 
 - 애그리거트 내 상세 클래스를 바로 참조하지않고 애그리거트 루트만 참조하였습니다.
 - 애그리거트 간의 참조는 객체를 직접 참조하는 대신 기본키(id)를 사용하여 수정이 필요하지 않은 애그리거트를 함께 수정하는 실수를 원천적으로 방지하였습니다.
 
-## 2-2. 마이크로서비스 가트너 아키텍처
+## 2-3. 마이크로서비스 가트너 아키텍처
 
 <p align="center"><img src="https://user-images.githubusercontent.com/57690870/215766772-50b29926-58d5-4ccb-9143-0178260a869a.png"></p>
 
@@ -75,13 +75,13 @@
 
 이벤트 주도 아키텍처를 적극 도입하여 동기통신이 필수적으로 필요한 로직을 제외하고 마이크로서비스 간 통신은 비동기로 설계, 개발하였습니다. 이벤트 브로커 솔루션으로 `아파치 카프카`를 사용하였습니다.
 
-## 2-131. 분산 로그 트레이싱 zipkin 도입
+## 2-4. 분산 로그 트레이싱 zipkin 도입
 
 <p align="center"><img src="https://user-images.githubusercontent.com/57690870/215766924-12de94cc-2b47-4b8d-aac9-5d14ff896b9e.png"></p>
 
 마이크로서비스로 설계, 개발함에 따라 사용자로부터의 요청 흐름 중에서 어느 지점에서 장애나 병목 현상이 발생하였는지 점점 추적하기 어려웠고,`zipkin`을 도입하여 문제를 해결하였습니다. 이 과정에서 `Spring Cloud Sleuth` 를 사용하였습니다.
 
-## 2-10. API Gateway 패턴을 활용한 인증 / 인가 구현
+## 2-5. API Gateway 패턴을 활용한 인증 / 인가 구현
 
 <p align="center"><img src="https://user-images.githubusercontent.com/57690870/215767058-2e68d272-294b-4092-bd72-2c980914d6d4.png" width="630" height="800"></p>
 
@@ -89,7 +89,13 @@
 
 이에 대한 해결 방안으로 `API Gateway`를 통한 토큰 검증 패턴을 도입했습니다. 이를 통해 각 마이크로서비스의 API를 이용하기 위해서는 앞단의 `API Gateway`를 거치도록 설계하였고, `API Gateway`에서 `Lambda Authorizer`를 통해 `JWT` 토큰이 검증되고, 검증된 토큰의 페이로드에 저장되어있는 대칭키로 암호화한 사용자 식별값을 다시 복호화하여 뒷단의 마이크로서비스에 전달되도록 구현했습니다. 
 
-## 2-3. 데이터베이스 ERD 및 RDB 구조
+## 2-6. 사가패턴 도입
+유저 프로필과 인증 마이크로서비스를 분리한 상황이였습니다. 인증 마이크로서비스에서 사용자 등록이 되었으나 프로필 마이크로서비스 데이터베이스에 반영되지 않아 정합성이 불일치하는 문제가 발생하였고, 사가패턴을 도입하여 해결하였습니다.
+인증 서비스에서 유저를 등록한 후 이벤트를 발행합니다. 프로필 서비스에서 이벤트를 받아 처리한 후 그 결과를 다시 비동기로 전달하였습니다.
+인증 마이크로서비스는 해당 응답을 받아 알맞는 처리를 하도록 하였습니다.
+
+
+## 2-7. 데이터베이스 ERD 및 RDB 구조
 
 - `auth service`
 
@@ -124,19 +130,19 @@
     <p align="center"><img src="https://user-images.githubusercontent.com/57690870/215767684-5faabce5-f8f9-471a-9477-f9ae2381f573.png" width="38%"></p>
     
 
-## 2-4. 마이크로서비스 API 통합 문서화
+## 2-8. 마이크로서비스 API 통합 문서화
 
 <p align="center"><img src="https://user-images.githubusercontent.com/57690870/215767731-c7b80351-2ce3-48d0-98d6-628cf0fbe936.png"></p>
 
 마이크로서비스들의 API를 통합 관리하기 위해, 각 마이크로서비스의 API를 `Spring REST Docs`로 문서화 한뒤, `Swagger UI`를 통해 통합 관리하였습니다.
 
-## 2-7. API 서버 CI/CD 파이프라인
+## 2-9. API 서버 CI/CD 파이프라인
 
 <p align="center"><img src="https://user-images.githubusercontent.com/57690870/215767766-0f51393b-5889-4a77-9fcf-193156774944.png"></p>
 
 `Jenkins`를 통해 CI/CD 파이프라인을 구축하였습니다. 이때, 각 마이크로서비스 별로 Open API Spec을 추출해 `Swagger UI` 서버로 전송하여 API 문서 통합을 수행하으며, 도커 이미지를 만들어 `ECR`에 업로드 후 `EKS`에서 업로드한 도커 이미지를 받아 Rolling Update를 수행했습니다.
 
-## 2-8. AWS S3 Presigned URL 기반 미디어 업로드
+## 2-10. AWS S3 Presigned URL 기반 미디어 업로드
 
 <p align="center"><img src="https://user-images.githubusercontent.com/57690870/215767827-154daf82-68a8-4c5a-801e-6ba34a966138.png"></p>
 
